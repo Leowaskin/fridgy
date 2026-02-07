@@ -1,79 +1,152 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" /> Add logo here!!!
 </div>
 
-# Run and deploy your AI Studio app
+## Fridgy
 
-This contains everything you need to run your app locally.
+An AI-powered refrigerator management app that helps you track your food inventory, discover recipes, and maintain your health goals—all with the power of Google's Gemini AI.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1pa6OFhYeVtNdqMX8Uoo8RDJSqIJ-dVNx
+## Features
 
-## Run Locally
+- **Smart Fridge Scanning** : Take a photo of your fridge and let AI automatically detect all your food items with estimated expiry dates
+- **Inventory Management** : Track food items, quantities, and expiry dates with automatic notifications for items going bad soon
+- **Recipe Discovery** : Get personalized recipe suggestions based on what's currently in your fridge
+- **Health Tracking** : Monitor your weight, calories, and macronutrients with AI-powered insights
+- **Offline-First** : All data is stored locally in your browser—no account required, complete privacy
 
-**Prerequisites:**  Node.js
+# Run and deploy our AI Studio app
+View our app in AI Studio: https://ai.studio/apps/drive/1pa6OFhYeVtNdqMX8Uoo8RDJSqIJ-dVNx
+
+## Project Structure
+
+```
+fridgy/
+├── fridgy-application/
+│   ├── pages/
+│   │   ├── Home.tsx          # Main dashboard
+│   │   ├── Scan.tsx          # Camera interface for fridge scanning
+│   │   ├── Recipes.tsx       # Recipe discovery
+│   │   └── Health.tsx        # Health tracking & insights
+│   ├── components/
+│   │   ├── Navbar.tsx        # Navigation component
+│   │   └── InventoryCard.tsx # Food item display
+│   ├── hooks/
+│   │   ├── useInventory.ts   # Inventory state management
+│   │   └── useHealth.ts      # Health data management
+│   ├── services/
+│   │   └── geminiService.ts  # Google Gemini API integration
+│   ├── App.tsx               # Main app component
+│   └── types.ts              # TypeScript type definitions
+└── README.md                 # This file
+└── setup.md                  # Setup instructions
+
+```
+
+## Architecture
+
+### Data Storage (localStorage)
+
+Fridgy uses **browser localStorage** for data persistence:
+- **`fridgy_inventory`**: Food items with quantities and expiry dates
+- **`fridgy_health_profile`**: User's health metrics (weight, height, allergies)
+- **`fridgy_health_logs`**: Daily calorie and macro tracking
+
+**Advantages:**
+- ⚡ Fast and responsive
+- 🔒 Privacy-first (data never leaves your device, except for API calls)
+- 📱 Works offline
+- ✨ No login or database required
+
+**Note:** Data is cleared if you clear your browser cache.
+
+### Component Architecture
+
+```
+App.tsx (Router)
+├── Navbar (Navigation)
+└── Pages
+    ├── Home (Dashboard)
+    ├── Scan (Fridge Image Analysis)
+    ├── Recipes (AI-Generated Suggestions)
+    └── Health (Profile & Tracking)
+```
+
+### Key Modules
+
+**Hooks (State Management)**
+- `useInventory.ts`: CRUD operations for food items, auto-sync to localStorage
+- `useHealth.ts`: Health profile management, calorie calculations
+
+**Services (AI Integration)**
+- `geminiService.ts`: 
+  - Image analysis for fridge scanning
+  - Recipe generation based on available items
+  - Health insights and recommendations
+
+## Tech Stack
+
+- **Frontend Framework**: React 19
+- **Routing**: React Router v7
+- **Styling**: Tailwind CSS
+- **Build Tool**: Vite
+- **Language**: TypeScript
+- **AI API**: Google Gemini
+- **Icons**: Lucide React
+- **Utilities**: clsx
+
+## AI Integration
+
+Fridgy leverages **Google's Gemini 3 Flash** model for:
+1. **Image Recognition**: Analyzing fridge photos to identify food items
+2. **Recipe Generation**: Creating personalized recipes from available ingredients
+3. **Health Analysis**: Providing nutrition insights and health recommendations
+
+All API calls are made client-side with your API key.
+
+## Pages Overview
+
+### Home
+Dashboard showing:
+- Inventory summary
+- Items expiring soon
+- Quick health stats
+- Navigation to other sections
+
+### Scan
+- Camera interface to capture fridge photos
+- AI automatically detects and adds items
+- Review and confirm detected items
+- Add custom items manually
+
+### Recipes
+- View recipe suggestions based on current inventory
+- Filter by dietary preferences
+- Get cooking instructions via AI
+
+### Health
+- Input and track health metrics
+- View daily calorie/macro logs
+- Get personalized health insights
+
+## Privacy & Security
+
+- **No Backend Server**: All processing happens in your browser
+- **No Database**: Your data never touches external servers (except Gemini API)
+- **API Key Only**: Requires only your Gemini API key for AI features
+- **Local Data**: Full control over your personal information
 
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Contributing
 
+Feel free to fork, modify, and improve Fridgy! Some areas for enhancement:
+- Multiple user profiles
+- Cloud sync via Firebase/Supabase
+- Mobile app version
+- Advanced nutritional analysis
+- Weekly meal planning
 
-This is a purely frontend React application. Since there is no external database (like SQL, MongoDB, or Firebase) connected, all data is stored locally on your device using the Browser's localStorage API.
+## Get Started
 
-Here is a comprehensive walkthrough of the architecture and data flow.
-1. Data Storage Strategy (localStorage)
-The app persists data so that when you refresh the page or close the browser, your inventory and health stats remain.
-Location: hooks/useInventory.ts and hooks/useHealth.ts.
-How it works: When state changes (e.g., adding an item), the hook converts the JavaScript object to a JSON string and saves it to the browser.
-Storage Keys:
-eatAI_inventory: Stores the list of food items, expiry dates, etc.
-eatAI_health_profile: Stores weight, height, BMI, allergies.
-eatAI_health_logs: Stores daily calorie/macro history.
-Pros: Fast, works offline, no login required, privacy-focused (data never leaves the device except to go to Gemini for analysis).
-Cons: If you clear your browser cache, you lose the data. You cannot sync data between your phone and your laptop.
-
-2. Architecture Overview
-The app follows a Service-Oriented Frontend Architecture:
-A. The "Brain" (Custom Hooks)
-Instead of scattering logic inside UI components, state management is centralized in Hooks.
-hooks/useInventory.ts:
-Loads inventory from local storage on boot.
-Exposes functions like addItem, removeItem, updateInventory.
-Handles the synchronization between React State and LocalStorage.
-hooks/useHealth.ts:
-Manages the user's bio-data and daily food logs.
-Calculates logic like aggregating daily calories.
-B. The "Intelligence" (Services)
-services/geminiService.ts:
-This is the bridge to the Google Gemini API.
-It does not store data. It is purely functional: Input (Image/Text) -> Processing -> Output (JSON Data).
-Functions:
-analyzeFridgeImage: Sends Base64 image -> Returns InventoryItem[].
-generateRecipe: Sends inventory list -> Returns Recipe[] with macros.
-generateMealPlan: Sends health profile -> Returns Markdown plan.
-C. The "View" (Pages & Components)
-App.tsx: Sets up the Router (navigation between pages).
-pages/Scan.tsx:
-Captures image (Camera/Upload).
-Calls analyzeFridgeImage.
-New Feature: Allows user to edit the result in a Modal.
-Calls addItems from useInventory to save to LocalStorage.
-pages/Recipes.tsx:
-Reads inventory from useInventory.
-Calls generateRecipe.
-New Feature: When you click "I ate this", it calls addLog from useHealth to save macros to LocalStorage.
-pages/Health.tsx:
-Reads logs from useHealth.
-Visualizes data using CSS-based bar charts.
-Interacts with Gemini to generate text-based meal plans.
-
-3. Data Flow Example: Scanning an Apple
-User Action: User takes a photo of an Apple in Scan.tsx.
-Service Call: Scan.tsx converts image to Base64 -> sends to geminiService.ts.
-AI Processing: Gemini analyzes image, detects "Apple", estimates expiry (7 days), estimates fragility. Returns JSON.
-User Confirmation: Scan.tsx shows the "Detected Items" list. User clicks "Edit", changes quantity from 1 to 2.
-State Update: User clicks "Save". Scan.tsx calls addItems(newApple).
-Storage: useInventory hook updates the React State (UI updates immediately) AND writes eatAI_inventory to localStorage.
-Result: The user is redirected to Home.tsx, which re-renders because it is listening to useInventory, showing the Apple card.
+### Prerequisites
+- **Node.js** (v16 or higher)
+- **Google Gemini API Key** (get one [here](https://ai.google.dev/))
