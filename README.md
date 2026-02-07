@@ -14,7 +14,7 @@ An AI-powered refrigerator management app that helps you track your food invento
 - **Health Tracking** : Monitor your weight, calories, and macronutrients with AI-powered insights
 - **Offline-First** : All data is stored locally in your browser—no account required, complete privacy
 
-# Run and deploy our AI Studio app
+# Test our app
 View our app in AI Studio: https://ai.studio/apps/drive/1pa6OFhYeVtNdqMX8Uoo8RDJSqIJ-dVNx
 
 ## Project Structure
