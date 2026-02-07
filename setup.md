@@ -14,10 +14,11 @@
    ```
 
 2. **Set up your API key:**
-   Create a `.env.local` file in the `fridjy-application` directory:
+   Create a `.env` file in the `fridjy-application` directory:
    ```
    VITE_GEMINI_API_KEY=your_gemini_api_key_here
    ```
+   or copy the .env.example file to .env and replace the API key with your own.
 
 3. **Start the development server:**
    ```bash
