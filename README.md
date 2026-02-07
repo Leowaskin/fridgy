@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="fridgy-logo" src="/fridgy-application/fridgy_logo.png" />
+<img width="1200" height="395" alt="fridgy-logo" src="/fridgy-application/fridgy_logo.png" />
 </div>
 
 ## Fridgy
